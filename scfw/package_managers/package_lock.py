@@ -16,11 +16,11 @@ MIN_NPM_VERSION = version_parse("7.0.0")
 
 NODE_MODULES_PREFIX = "node_modules/"
 PACKAGE_LOCK_FILE = "package-lock.json"
+NPM_EXECUTABLE = "npm"
 
 class PackageLock(PackageManager):
     
-    def __init__(self, executable: Optional[str] = None):
-        executable = "npm"
+    def __init__(self, executable: Optional[str] = NPM_EXECUTABLE):
         self._executable = executable
 
     @classmethod

@@ -73,8 +73,13 @@ class PackageLock(PackageManager):
                     continue
                 if (package_dependencies := package_data.get("dependencies")):
                     packages |= dependencies_to_packages(package_dependencies)
+                  
+                # metadata is a tuple of (key, value) pairs for hashability
+                metadata = ()
+                if "scripts" in package_data and package_data["scripts"]:
+                    metadata = (("scripts", True),)
                 
-                packages.add(Package(ECOSYSTEM.Npm, remove_prefix(name), package_data.get("version")))
+                packages.add(Package(ECOSYSTEM.Npm, remove_prefix(name), package_data.get("version"), metadata))
 
             return packages
 

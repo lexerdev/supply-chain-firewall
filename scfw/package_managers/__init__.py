@@ -7,11 +7,13 @@ from typing import Optional
 
 from scfw.package_manager import PackageManager
 from scfw.package_managers.npm import Npm
+from scfw.package_managers.package_lock import PackageLock
 from scfw.package_managers.pip import Pip
 from scfw.package_managers.poetry import Poetry
 
 SUPPORTED_PACKAGE_MANAGERS = [
     Npm.name(),
+    PackageLock.name(),
     Pip.name(),
     Poetry.name(),
 ]
@@ -43,5 +45,7 @@ def get_package_manager(name: str, executable: Optional[str] = None) -> PackageM
         return Pip(executable)
     if name == Poetry.name():
         return Poetry(executable)
+    if name == PackageLock.name():
+        return PackageLock(executable)
 
     raise ValueError(f"Unsupported package manager '{name}'")

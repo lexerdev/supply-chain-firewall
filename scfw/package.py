@@ -32,7 +32,7 @@ class Package:
             `PyPI` packages: `"{name}-{version}"`
         """
         match self.ecosystem:
-            case ECOSYSTEM.Npm:
+            case ECOSYSTEM.Npm | ECOSYSTEM.PackageLock:
                 return f"{self.name}@{self.version}"
             case ECOSYSTEM.PyPI:
                 return f"{self.name}-{self.version}"

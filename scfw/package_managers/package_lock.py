@@ -68,9 +68,12 @@ class PackageLock(PackageManager):
             for name, package_data in dependencies.items():
                 if name == "":  # Skip the root package entry
                     continue
-                if not isinstance(package_data, str) and (package_dependencies := package_data.get("dependencies")):
+                if isinstance(package_data, str):
+                    packages.add(Package(ECOSYSTEM.Npm, remove_prefix(name), package_data))
+                elif (package_dependencies := package_data.get("dependencies")):
                     packages |= dependencies_to_packages(package_dependencies)
-                packages.add(Package(ECOSYSTEM.Npm, remove_prefix(name), package_data if isinstance(package_data, str) else package_data.get("version")))
+                else:
+                    packages.add(Package(ECOSYSTEM.Npm, remove_prefix(name), package_data.get("version")))
 
             return packages
 

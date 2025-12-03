@@ -38,10 +38,6 @@ def test_npm_list_installed_packages(monkeypatch):
     """
 
     monkeypatch.setattr(
-        PACKAGE_MANAGER, "_check_version", lambda: MIN_NPM_VERSION
-    )
-
-    monkeypatch.setattr(
         "scfw.package_managers.package_lock.PACKAGE_LOCK_FILE",
         "tests/package_managers/package-lock.json"
     )

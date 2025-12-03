@@ -70,14 +70,13 @@ class PackageLock(PackageManager):
                     continue
                 if isinstance(package_data, str):
                     packages.add(Package(ECOSYSTEM.Npm, remove_prefix(name), package_data))
-                elif (package_dependencies := package_data.get("dependencies")):
+                    continue
+                if (package_dependencies := package_data.get("dependencies")):
                     packages |= dependencies_to_packages(package_dependencies)
-                else:
-                    packages.add(Package(ECOSYSTEM.Npm, remove_prefix(name), package_data.get("version")))
+                
+                packages.add(Package(ECOSYSTEM.Npm, remove_prefix(name), package_data.get("version")))
 
             return packages
-
-        self._check_version()
 
         try:
             with open(PACKAGE_LOCK_FILE, 'r', encoding='utf-8') as lockfile:
@@ -92,23 +91,4 @@ class PackageLock(PackageManager):
         
         except KeyError:
             raise ValueError("Malformed installed package report")
-        
 
-    def _check_version(self):
-        """
-        Check whether the underlying `npm` executable is of a supported version.
-
-        Raises:
-            UnsupportedVersionError: The underlying `npm` executable is of an unsupported version.
-        """
-        def get_npm_version(executable: str) -> Optional[Version]:
-            try:
-                # All supported versions adhere to this format
-                npm_version = subprocess.run([executable, "--version"], check=True, text=True, capture_output=True)
-                return version_parse(npm_version.stdout.strip())
-            except InvalidVersion:
-                return None
-
-        npm_version = get_npm_version(self._executable)
-        if not npm_version or npm_version < MIN_NPM_VERSION:
-            raise UnsupportedVersionError(f"npm before v{MIN_NPM_VERSION} is not supported")

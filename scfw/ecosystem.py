@@ -11,6 +11,7 @@ class ECOSYSTEM(Enum):
     """
     Npm = "npm"
     PyPI = "PyPI"
+    PackageLock = "package-lock"
 
     def __str__(self) -> str:
         """

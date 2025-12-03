@@ -16,10 +16,12 @@ class Package:
         ecosystem: The package's ecosystem.
         name: The package's name.
         version: The package's version string.
+        metadata: Optional tuple of key-value pairs for package metadata.
     """
     ecosystem: ECOSYSTEM
     name: str
     version: str
+    metadata: tuple = None
 
     def __str__(self) -> str:
         """
@@ -32,7 +34,7 @@ class Package:
             `PyPI` packages: `"{name}-{version}"`
         """
         match self.ecosystem:
-            case ECOSYSTEM.Npm:
+            case ECOSYSTEM.Npm | ECOSYSTEM.PackageLock:
                 return f"{self.name}@{self.version}"
             case ECOSYSTEM.PyPI:
                 return f"{self.name}-{self.version}"
